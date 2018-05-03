@@ -50,7 +50,7 @@ IJM.show('I')
 
 This will end up X and Y flipped over, and channels are not recognized as channels (instead, it is interpreted as time frames).
 
-![Image005](D:\Dropbox\Private_Dropbox\Projects\ijmshow\Image005.png)
+![Image005](Image005.png)
 
 ```matlab
 imp = ijmshow(I)
@@ -58,7 +58,7 @@ imp = ijmshow(I,'YXC') % equivalent as above
 imp = ijmshow(I,'YXCZT') % equivalent as above
 ```
 
-![Image004](D:\Dropbox\Private_Dropbox\Projects\ijmshow\Image004.png)
+![Image004](Image004.png)
 
 
 
@@ -70,7 +70,7 @@ imp = IJ.openImage("http://imagej.nih.gov/ij/images/Spindly-GFP.zip");
 imp.show();
 ```
 
-![Image002](D:\Dropbox\Private_Dropbox\Projects\ijmshow\Image002.png)
+![Image002](Image002.png)
 
 ```matlab
 IJM.getDatasetAs('I');
@@ -85,7 +85,7 @@ imp2 = ij.IJ.getImage()
 
 
 
-![Image006](D:\Dropbox\Private_Dropbox\Projects\ijmshow\Image006.png)
+![Image006](Image006.png)
 
 ```
 imp2 =
@@ -100,7 +100,7 @@ imp3 = ijmshow(I,'XYCZT')
 
  `'XYCZT'` will accept the flipped over X and Y as input. Now it is shown as 2 channels (C), 5 slices (Z) and 51 frames (T) as expected.
 
-![Image003](D:\Dropbox\Private_Dropbox\Projects\ijmshow\Image003.png)
+![Image003](Image003.png)
 
 
 
