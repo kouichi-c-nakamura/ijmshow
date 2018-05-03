@@ -98,7 +98,7 @@ img["" (-1120), 32-bit, 171x196x1x1x510]
 imp3 = ijmshow(I,'XYCZT')
 ```
 
- `'XYCZT'` will accept the flipped over X and Y as input. Now it is shown as 2 channels (C), 5 slices (Z) and 51 frames (T) as expected.
+ `'XYCZT'` will accept the flipped over X and Y as input. Now it is shown as 2 channels (C), 5 slices (Z) and 51 frames (T) as expected. The image looks brighter because of the difference in `DisplayRange` setting, but the numeric values were identical to the original.
 
 ![Image003](Image003.png)
 
