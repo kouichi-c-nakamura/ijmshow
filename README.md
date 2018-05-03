@@ -3,13 +3,13 @@ A MATLAB function. A wrapper of `net.imagej.matlab.ImageJMATLABCommands.show()` 
 
 
 
-## Running ImageJ within MATLAB
+## Opening an image in ImageJ from within MATLAB
 
 https://imagej.net/MATLAB_Scripting#Running_ImageJ_within_MATLAB
 
 
 
-ImageJ-MATLAB at part of Fiji installation allows us to open an ImageJ instance from within MATLAB and we can transfer an array of  data using `IJM.show('name')` (from MATLAB to ImageJ) and `IJM.getDataset()` and `IJM.getDatasetAs('name')`(from ImageJ to MATLAB).
+`ImageJ-MATLAB` as part of Fiji installation allows us to open an ImageJ instance from within MATLAB and we can transfer an array of  data using `IJM.show('name')` (from MATLAB to ImageJ) and `IJM.getDataset()` and `IJM.getDatasetAs('name')`(from ImageJ to MATLAB).
 
 Although these are useful, the current version of ImageJ-MATLAB's  ``IJM.show('name')` has the following limitations:
 
@@ -18,6 +18,11 @@ Although these are useful, the current version of ImageJ-MATLAB's  ``IJM.show('n
 3. No matter what data type the original MATLAB array is, it is shown in ImageJ as `int32` data type. Conversion of the datatype to bytes (`uint8`) or short ( `uint16`) in ImageJ can involve scaling of numeric values, resulting in unexpected changes of pixel values, unless carefully avoided.
 
 `ijmshow` is a wrapper of  `net.imagej.matlab.ImageJMATLABCommands.show()` (or `IJM.show()`) and offers solutions to the above issues. Until someone can fix the `IJM.show()` properly some day, `ijmshow` will be useful for interaction between MATLAB and ImageJ.
+
+1. X and Y axes can be corrected (eg, using `YXCZT` by default) or left as default behaviour (eg. `XYCZT`)
+2. The`dimorder` input argument can specify the dimensions for channels (C), slices (Z), and frames (T) (by default `YXCZT`)
+3. Numeric values of pixel data are maintained while the image type is converted to 16 bit or 8 bit depending on the data type of the original MATLAB array.
+4. You can access `IJM` in the base Workspace from within a MATLAN function. You can open a MATLAB array in a function with ImageJ.
 
 
 
@@ -114,6 +119,13 @@ img["" (-1124), 32-bit, 171x196x2x5x51]
 ### `ijmshow_test`
 
 This is a `matlab.unittest.TestCase` subclass and verify the numeric values and dimensions of the `ImagePlus` objects in ImageJ opened by `ijmshow`.
+
+
+
+### Issues
+
++ 12bit data is not well supported or tested
++ `FrameInterval` may not be properly set, because File Info... does not show the Frame Interval.
 
 
 
