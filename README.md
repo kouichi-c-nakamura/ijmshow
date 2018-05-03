@@ -11,7 +11,7 @@ https://imagej.net/MATLAB_Scripting#Running_ImageJ_within_MATLAB
 
 `ImageJ-MATLAB` as part of Fiji installation allows us to open an ImageJ instance from within MATLAB and we can transfer an array of  data using `IJM.show('name')` (from MATLAB to ImageJ) and `IJM.getDataset()` and `IJM.getDatasetAs('name')`(from ImageJ to MATLAB).
 
-Although these are useful, the current version of ImageJ-MATLAB's  ``IJM.show('name')` has the following limitations:
+Although these are useful, the current version of ImageJ-MATLAB's  `IJM.show('name')` has the following limitations:
 
 1. `IJM.show('name')` will flip over the X and Y axes of array between MATLAB and ImageJ
 2. `IJM.show('name')` cannot handle multidimensional (>2D) images properly; All the third and higher dimensions are piled as the fifth dimension of a 5D hyperstack. This is a real pain if you are handling more than one channel, one slice, or one frame of images, as is often the case.
