@@ -65,7 +65,11 @@ imp = ijmshow(I,'YXCZT') % equivalent as above
 
 ![Image004](Image004.png)
 
+```matlab
+imp = ijmshow(I,'XYC') % X an Y flipped over
+```
 
+![image001](image001.png)
 
 ### 5D hyperstack
 
