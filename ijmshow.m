@@ -26,16 +26,19 @@ function imp = ijmshow(I,varargin)
 %             have from 2 to 5 dimensions.
 %
 %
-% dimorder    char row vector | 'YXCZT' (default)
-%             (Optional) char vector composed of 'X', 'Y', 'C', 'Z', and
-%             'T'. The first two letters must be either 'X' or 'Y'. The
-%             length of dimorder must be 5 or match the number of
-%             dimensions of the array specified by I. The third to
-%             the fifth letters must be chosen from 'C' for channels, 'Z'
-%             for slices, and 'T' for frames.
+% dimorder    char row vector made of 'XYCZT' | 'YXCZT' (default)
+%
+%             (Optional) A char row vector composed of 'X', 'Y', 'C' for
+%             channels, 'Z' for slices, and 'T' for frames. dimorder is
+%             case insensitive. You cannot repeat any of the five letters
+%             in dimorder. The first two letters must be either 'X' or 'Y'.
+%             The length of dimorder must be 5 or match the number of
+%             dimensions of the array specified by I. The third to the
+%             fifth letters must be chosen from 'C', 'Z', and 'T'.
 %
 %             The default is set 'YXCZT' rather than 'XYZCT', because the X
-%             and Y axes of an MATLAB array is flipped over in ImageJ.
+%             and Y axes of an MATLAB array is flipped over in ImageJ by
+%             IJM.show().
 %
 %
 % OPTIONAL PARAMETER/VALUE PAIRS
@@ -49,6 +52,10 @@ function imp = ijmshow(I,varargin)
 % OUTPUT ARGUMENTS
 % imp         ij.ImagePlus Java object
 %
+% EXAMPLES
+% see https://github.com/kouichi-c-nakamura/ijmshow
+%
+%
 % Written by Kouichi C. Nakamura Ph.D.
 % MRC Brain Network Dynamics Unit
 % University of Oxford
@@ -56,10 +63,10 @@ function imp = ijmshow(I,varargin)
 % 03-May-2018 04:57:24
 %
 % See also
-% ImageJ
+% https://github.com/kouichi-c-nakamura/ijmshow (repository for this function)
+% ImageJ as part of ImageJ-MATLAB (https://github.com/imagej/imagej-matlab/)
 % net.imagej.matlab.ImageJMATLABCommands
-% ImageJ-MATLAB
-% evalin
+% evalin, assignin
 % https://imagej.net/MATLAB_Scripting
 
 
@@ -74,8 +81,8 @@ assert(evalin('base','strcmp(class(IJM) ,''net.imagej.matlab.ImageJMATLABCommand
 p = inputParser;
 p.addRequired('I',@(x) isnumeric(x));
 p.addOptional('dimorder','YXCZT',@(x) ischar(x) && isrow(x) ...
-    && all(arrayfun(@(y) ismember(y,'XYCZT'),x)) && length(x) >=2 ...
-    && all(arrayfun(@(y) ismember(y,'XY'),x(1:2)))...
+    && all(arrayfun(@(y) ismember(y,'XYCZT'),upper(x))) && length(x) >=2 ...
+    && all(arrayfun(@(y) ismember(y,'XY'),upper(x(1:2))))...
     );
 p.addParameter('NewName','',@(x) ischar(x) && isrow(x));
 p.addParameter('FrameInterval',[],@(x) isreal(x) && x > 0);
@@ -93,6 +100,8 @@ if length(dimorder) ~=5
     
 end
 
+assert(ndims(I) >= 2,'"I" must have at least 2 dimensions')
+assert(ndims(I) <= 5,'"I" cannot have more than 5 dimensions')
 
 %% Job
 eval('import ij.IJ')
@@ -117,8 +126,8 @@ bitdepth = class(I);
 IMP = IJ.getImage();
 
 IMP.isHyperStack;
-
 st = IMP.getStack;
+IMP.hide();
 
 
 switch bitdepth
@@ -155,22 +164,14 @@ for t = 1:nT
                 otherwise
                     imp.setProcessor(ip);
             end
-            
-            
         end
     end
 end
 
-IMP.close();
-
-
 imp.setT(1);
 imp.setZ(1);
 imp.setC(1);
-
-imp.show();
-imp.setDisplayMode(ij.IJ.COLOR) %NOTE this is required to enable the next line
-imp.setDisplayMode(ij.IJ.COMPOSITE)
+imp.show(); %NOTE necessary
 
 switch dimorder(3:ndims(I))
 
@@ -187,7 +188,7 @@ switch dimorder(3:ndims(I))
     case {'TZC','TZ'}
         IJ.run("Re-order Hyperstack ...", "channels=[Frames (t)] slices=[Slices (z)] frames=[Channels (c)]")
 end
-imp = IJ.getImage();%NOTE necessary after Re-order Hyperstack
+imp = IJ.getImage();%NOTE necessary after 'Re-order Hyperstack'
 
 if ~isempty(frameinterval)
     
@@ -196,5 +197,14 @@ if ~isempty(frameinterval)
     imp.setFileInfo(fi);
     %TODO Show Info... does not show the frameinterval
 end
+
+imp.show();
+imp.setDisplayMode(ij.IJ.COLOR) %NOTE this is required to enable the next line
+imp.setDisplayMode(ij.IJ.COMPOSITE)
+imp.resetDisplayRanges();
+
+IMP.close();
+
+
 
 end

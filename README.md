@@ -38,19 +38,19 @@ imp = ijmshow(____,'Param',value)
 
 
 
-## Examples
+## MATLAB code examples
 
 
 
 ### RGB image
 
 ```matlab
-addpath '/Applications/Fiji.app/scripts'
-ImageJ
+>> addpath '/Applications/Fiji.app/scripts'
+>> ImageJ
 
-I = imread('peppers.png')
+>> I = imread('peppers.png') % the size of I is 384 x 512 x 3 in MATLAB
 
-IJM.show('I') 
+>> IJM.show('I')
 ```
 
 This will end up X and Y flipped over, and channels are not recognized as channels (instead, it is interpreted as time frames).
@@ -58,15 +58,15 @@ This will end up X and Y flipped over, and channels are not recognized as channe
 ![Image005](Image005.png)
 
 ```matlab
-imp = ijmshow(I)
-imp = ijmshow(I,'YXC') % equivalent as above
-imp = ijmshow(I,'YXCZT') % equivalent as above
+>> imp = ijmshow(I)
+>> imp = ijmshow(I,'YXC') % equivalent as above
+>> imp = ijmshow(I,'YXCZT') % equivalent as above
 ```
 
 ![Image004](Image004.png)
 
 ```matlab
-imp = ijmshow(I,'XYC') % X an Y flipped over
+>> imp = ijmshow(I,'XYC') % X an Y flipped over
 ```
 
 ![Image001](Image001.png)
@@ -75,48 +75,74 @@ imp = ijmshow(I,'XYC') % X an Y flipped over
 
 
 ```matlab
-imp = IJ.openImage("http://imagej.nih.gov/ij/images/Spindly-GFP.zip");
-imp.show();
+>> imp = IJ.openImage("http://imagej.nih.gov/ij/images/Spindly-GFP.zip");
+>> imp.show();
+>> imp
 ```
+
+```
+imp =
+img["mitosis.tif" (-1132), 16-bit, 171x196x2x5x51]
+```
+
+The image has 171 X, 196 Y, 2 channels (C), 5 slices (Z), and 51 frames (T).
 
 ![Image002](Image002.png)
 
 ```matlab
-IJM.getDatasetAs('I');
+>> IJM.getDatasetAs('I');
 
-size(I) % 171   196     2     5    51
-%Note X and Y are now flipped over by IJM.getDatasetAs('I');
-
-IJM.show('I') 
-imp2 = ij.IJ.getImage()
+>> size(I) 
 ```
-`IJM.show()` will flip X and Y again, so back to normal X and Y.  However, 2 channels (C), 5 slices (Z) and 51 frames (T) are all piled in the fifth dimension as 510 time frames (T).
+
+```
+ans =
+   171   196     2     5    51
+```
+Note that X and Y have already been flipped over by `IJM.getDatasetAs('I')`
+
+```matlab
+>> class(I)
+```
+
+```
+ans =
+    'double'
+```
+Note that the data type is `double` rather than `uint16`.
+
+```matlab
+>> I16 = uint16(I); % convert to uint16
+>> IJM.show('I16') 
+>> imp2 = ij.IJ.getImage()
+```
+
+```
+imp2 =
+img["" (-1136), 32-bit, 171x196x1x1x510]
+```
+
+`IJM.show()` will flip X and Y again, so back to normal X and Y.  However, the third to fifth dimensions of the image are all piled in the fifth dimension as 510 time frames (T). The image is in 32 bit type.
 
 
 
 ![Image006](Image006.png)
 
-```
-imp2 =
-img["" (-1120), 32-bit, 171x196x1x1x510]
-```
 
 
 
 ```matlab
-imp3 = ijmshow(I,'XYCZT')
+>> imp3 = ijmshow(I,'XYCZT')
 ```
-
- `'XYCZT'` will accept the flipped over X and Y as input. Now it is shown as 2 channels (C), 5 slices (Z) and 51 frames (T) as expected. The image looks brighter because of the difference in `DisplayRange` setting, but the numeric values were identical to the original.
-
-![Image003](Image003.png)
-
-
 
 ```
 imp3 =
-img["" (-1124), 32-bit, 171x196x2x5x51]
+img["" (-1180), 16-bit, 171x196x2x5x51]
 ```
+
+ `'XYCZT'` will accept the flipped over X and Y as input. Now it is shown as 2 channels (C), 5 slices (Z) and 51 frames (T) as expected. Image type is 16bit.  The image looks brighter because of the difference in `DisplayRange` setting, but the numeric values were identical to the original.
+
+![Image003](Image003.png)
 
 
 
@@ -130,6 +156,7 @@ This is a `matlab.unittest.TestCase` subclass and verify the numeric values and 
 
 + 12bit data is not well supported or tested
 + `FrameInterval` may not be properly set, because File Info... does not show the Frame Interval.
++ `Display Ranges` needs to be set separately. It's possible to implement an option to automatically set Display Ranges from the min to the max of each channel. It's not clear what `CompositeImage.resetDisplayRanges()` does.
 
 
 
