@@ -1,6 +1,9 @@
 # ijmshow
 A MATLAB function. A wrapper of `net.imagej.matlab.ImageJMATLABCommands.show()` (or `IJM.show()`) to support opening a MATLAB array as 5D hyperstack in ImageJ
 
+- [`copytoImagePlus`](https://github.com/kouichi-c-nakamura/copytoImagePlus) does the same job without requiring the Java object `IJM`
+- [`copytoImg`](https://github.com/fiji/fiji/blob/master/scripts/copytoImg.m) and [`copytoImgPlus` ](https://github.com/fiji/fiji/blob/master/scripts/copytoImgPlus.m) are bundled with Fiji and work in a similar way but using ImageJ2 API and objects.
+
 
 
 ## Opening an image in ImageJ from within MATLAB
@@ -157,6 +160,9 @@ This is a `matlab.unittest.TestCase` subclass and verify the numeric values and 
 + 12bit data is not well supported or tested
 + `FrameInterval` may not be properly set, because File Info... does not show the Frame Interval.
 + `Display Ranges` needs to be set separately. It's possible to implement an option to automatically set Display Ranges from the min to the max of each channel. It's not clear what `CompositeImage.resetDisplayRanges()` does.
++ `IJM.show(name)` appear to have a problem with handling large image data.
++ [`copytoImagePlus`](https://github.com/kouichi-c-nakamura/copytoImagePlus) does the same job without requiring the Java object `IJM`
++ [`copytoImg`](https://github.com/fiji/fiji/blob/master/scripts/copytoImg.m) and [`copytoImgPlus` ](https://github.com/fiji/fiji/blob/master/scripts/copytoImgPlus.m) are bundled with Fiji and work in a similar way but using ImageJ2 API and objects.
 
 
 
