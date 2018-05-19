@@ -1,6 +1,8 @@
 # ijmshow
 A MATLAB function. A wrapper of `net.imagej.matlab.ImageJMATLABCommands.show()` (or `IJM.show()`) to support opening a MATLAB array as 5D hyperstack in ImageJ
 
+**NOTE: `ijmshow` is not recommended** any more because of its dependency on `IJM`. **Consider using [`copytoImagePlus`](https://github.com/kouichi-c-nakamura/copytoImagePlus) instead.**
+
 - [`copytoImagePlus`](https://github.com/kouichi-c-nakamura/copytoImagePlus) does the same job without requiring the Java object `IJM`
 - [`copytoImg`](https://github.com/fiji/fiji/blob/master/scripts/copytoImg.m) and [`copytoImgPlus` ](https://github.com/fiji/fiji/blob/master/scripts/copytoImgPlus.m) are bundled with Fiji and work in a similar way but using ImageJ2 API and objects.
 
